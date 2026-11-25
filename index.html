@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catch The Star</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #10172e;
+  color: white;
+}
+
+h1 {
+  color: #ffd54f;
+  margin-top: 25px;
+}
+
+.info {
+  font-size: 20px;
+  margin: 15px;
+}
+
+#game {
+  width: 90%;
+  height: 400px;
+  margin: auto;
+  background: #202b4a;
+  border: 2px solid #5266a5;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+#star {
+  position: absolute;
+  font-size: 45px;
+  cursor: pointer;
+  user-select: none;
+  display: none;
+}
+
+button {
+  margin: 20px;
+  padding: 13px 30px;
+  border: none;
+  border-radius: 25px;
+  background: #ffd54f;
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⭐ Catch The Star</h1>
+
+<div class="info">
+  Score: <span id="score">0</span>
+  <br><br>
+  Time: <span id="time">30</span>s
+</div>
+
+<div id="game">
+  <div id="star">⭐</div>
+</div>
+
+<button onclick="startGame()">Start Game</button>
+
+<script>
+let score = 0;
+let time = 30;
+let playing = false;
+let timer;
+let mover;
+
+const game = document.getElementById("game");
+const star = document.getElementById("star");
+
+function moveStar() {
+  let maxX = game.clientWidth - 50;
+  let maxY = game.clientHeight - 50;
+
+  star.style.left = Math.random() * maxX + "px";
+  star.style.top = Math.random() * maxY + "px";
+}
+
+star.onclick = function() {
+  if (!playing) return;
+
+  score++;
+  document.getElementById("score").textContent = score;
+  moveStar();
+};
+
+function startGame() {
+  clearInterval(timer);
+  clearInterval(mover);
+
+  score = 0;
+  time = 30;
+  playing = true;
+
+  document.getElementById("score").textContent = score;
+  document.getElementById("time").textContent = time;
+
+  star.style.display = "block";
+  moveStar();
+
+  mover = setInterval(moveStar, 900);
+
+  timer = setInterval(function() {
+    time--;
+    document.getElementById("time").textContent = time;
+
+    if (time <= 0) {
+      clearInterval(timer);
+      clearInterval(mover);
+      playing = false;
+      star.style.display = "none";
+
+      alert("Game Over! Your score: " + score);
+    }
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
